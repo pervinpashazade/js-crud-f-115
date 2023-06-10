@@ -82,8 +82,8 @@
             age: 25
         }
 
-        localStorage.setItem("student", JSON.stringify([]))
-        localStorage.get("student", student)
+        // localStorage.setItem("student", JSON.stringify([]))
+        // localStorage.get("student", student)
 
 
         const name_input = document.getElementById("name")
@@ -94,7 +94,9 @@
         const submit_btn = document.getElementById("submitBtn")
         const validation_alert = document.getElementById("validationMessage")
 
-        const student_list = []
+        if (!localStorage.getItem("student_list")) {
+            localStorage.setItem("student_list", JSON.stringify([]))
+        }
 
         function validate() {
             const errors = []
@@ -139,26 +141,32 @@
 
         submit_btn.addEventListener("click", function () {
 
-            console.log(localStorage.getItem("name"));
+            // console.log(localStorage.getItem("name"));
 
             const errorMessages = validate()
 
             writeErrorMessage(errorMessages)
 
             if (!errorMessages.length) {
-                student_list.push({
+
+                const newStudent = {
                     name: name_input.value,
                     surname: surname_input.value,
                     email: email_input.value,
                     phone: phone_input.value,
                     course_id: course_input.value
-                })
+                }
+
+                const currentList = JSON.parse(localStorage.getItem("student_list"))
+                currentList.push(newStudent)
+
+                localStorage.setItem("student_list", JSON.stringify(currentList))
 
                 clearForm()
 
             }
 
-            console.log(student_list);
+            // console.log(student_list);
         })
     </script>
 </body>
