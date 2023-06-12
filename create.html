@@ -29,6 +29,12 @@
                     <input type="text" class="form-control" id="surname" placeholder="Soyad daxil edin">
                 </div>
                 <div class="mb-3">
+                    <label for="fin" class="form-label">
+                        FIN
+                    </label>
+                    <input type="text" class="form-control" id="fin" placeholder="FIN daxil edin">
+                </div>
+                <div class="mb-3">
                     <label for="email" class="form-label">
                         Email
                     </label>
@@ -46,12 +52,10 @@
                     </label>
                     <select id="course" class="form-select">
                         <option selected value="0">Kurs seçin</option>
-                        <option value="1">Frontend proqramlaşdırma</option>
-                        <option value="2">Backend proqramlaşdırma (Php)</option>
-                        <option value="3">Backend proqramlaşdırma (Java)</option>
                     </select>
                 </div>
                 <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
+                <a href="list.html" class="btn btn-secondary">Listə bax</a>
             </div>
             <div class="col-12 col-md-6 my-5">
                 <div id="validationMessage" class="alert alert-danger d-none">
@@ -77,22 +81,45 @@
         // set edende  => JSON.stringfy(  )
         // get edende  => JSON.parse(  )
 
-        const student = {
-            name: "Rehman",
-            age: 25
-        }
+        // const student = {
+        //     name: "Rehman",
+        //     age: 25
+        // }
 
         // localStorage.setItem("student", JSON.stringify([]))
         // localStorage.get("student", student)
 
 
+
+
+        // fetch (api)
+        const course_list = [{
+            id: 1,
+            name: "Frontend proqramlaşdırma"
+        }, {
+            id: 2,
+            name: "Backend proqramlaşdırma (Php)"
+        }, {
+            id: 3,
+            name: "Backend proqramlaşdırma (Java)"
+        }, {
+            id: 4,
+            name: "UX/UI Design"
+        }]
+        localStorage.setItem("course_list", JSON.stringify(course_list))
+
         const name_input = document.getElementById("name")
         const surname_input = document.getElementById("surname")
+        const fin_input = document.getElementById("fin")
         const email_input = document.getElementById("email")
         const phone_input = document.getElementById("phone")
         const course_input = document.getElementById("course")
         const submit_btn = document.getElementById("submitBtn")
         const validation_alert = document.getElementById("validationMessage")
+
+        course_list.forEach(item => {
+            course_input.innerHTML += `<option value="${item.id}">${item.name}</option>`
+        })
 
         if (!localStorage.getItem("student_list")) {
             localStorage.setItem("student_list", JSON.stringify([]))
@@ -108,8 +135,9 @@
 
             if (!name_input.value.trim()) errors.push("Ad daxil etməmisiniz")
             if (!surname_input.value.trim()) errors.push("Surname daxil etməmisiniz")
+            if (!fin_input.value.trim()) errors.push("FIN daxil etməmisiniz")
             if (!email_input.value.trim()) errors.push("Email daxil etməmisiniz")
-            if (!phone_input.value.trim()) errors.push("Phone daxil etməmisiniz")
+            if (!phone_input.value.trim()) errors.push("Telefon daxil etməmisiniz")
             !course_input.value && errors.push("Kurs seçilməyib")
             // !course_input.value ? errors.push("Phone daxil etməmisiniz") : ""
 
@@ -119,6 +147,7 @@
         function clearForm() {
             name_input.value = ""
             surname_input.value = ""
+            fin_input.value = ""
             email_input.value = ""
             phone_input.value = ""
             course_input.value = "0"
@@ -152,12 +181,14 @@
                 const newStudent = {
                     name: name_input.value,
                     surname: surname_input.value,
+                    fin: fin_input.value,
                     email: email_input.value,
                     phone: phone_input.value,
                     course_id: course_input.value
                 }
 
-                const currentList = JSON.parse(localStorage.getItem("student_list"))
+                let currentList = JSON.parse(localStorage.getItem("student_list"))
+                if (!currentList) currentList = []
                 currentList.push(newStudent)
 
                 localStorage.setItem("student_list", JSON.stringify(currentList))
