@@ -48,8 +48,8 @@
         const student_list = JSON.parse(str)
         const course_list = JSON.parse(localStorage.getItem("course_list"))
 
-        console.log(student_list);
-        console.log(course_list);
+        // console.log(student_list);
+        // console.log(course_list);
 
         function removeItem(fin_param, btn_elem) {
             // console.log("fin_param", fin_param);
@@ -90,6 +90,94 @@
 
             table_body.append(tr)
         });
+    </script>
+
+    <script>
+
+
+        // let name = res.data.data.username
+        let firstname = "Ferid"
+
+        // let user = {
+        //     name: "Huseyn"
+        // }
+
+        // switch (firstname) {
+        //     case "Rəhman": 
+        //         console.log("Təlim ustası");
+        //         break;
+        //     case "Pərvin":
+        //         console.log("React developer");
+        //         break;
+        //     case "Nərgiz":
+        //         console.log("Tələbə");
+        //         break;
+        //     default:
+        //         console.log("Təyin edilməyib");
+        // }
+
+        // const person = {
+        //     fullname: "Royal",
+        //     age: 26,
+        //     // sayHello: function () {
+        //     //     console.log(this);
+        //     //     console.log("my name is " + this.fullname);
+        //     //     // return "my name is Pervin"
+        //     // }
+        //     sayHello: () => {
+        //         console.log(this.fullname);
+        //     }
+        // }
+
+        // person.sayHello()
+
+
+
+
+        console.log(name);
+        var name = "Pervin"
+
+        // console.log(name);
+        // let name = "Pervin"
+
+
+        hello()
+
+        function hello() {
+            console.log("Hello");
+        }
+
+
+        function topla(num1, num2) {
+            console.log(num1 + num2);
+        }
+
+        function vur(num1, num2) {
+            console.log(num1 * num2);
+
+            // axios.get("....").then(res => console.log(res))
+        }
+
+        // regular ( function declaration)
+        function bol(num1, num2) {
+            console.log(num1 / num2);
+        }
+
+        topla(5, 5)
+        vur(5, 5)
+        bol(5, 5)
+
+
+        // function expression
+        const run = function () {
+            console.log("i'm running");
+            return "Salam"
+        }
+
+        console.log(run());
+
+
+
     </script>
 </body>
 
