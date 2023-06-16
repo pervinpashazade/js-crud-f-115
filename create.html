@@ -54,7 +54,7 @@
                         <option selected value="0">Kurs seçin</option>
                     </select>
                 </div>
-                <button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
+                <button type="submit" id="submitBtn" class="btn btn-primary">Əlavə et</button>
                 <a href="list.html" class="btn btn-secondary">Listə bax</a>
             </div>
             <div class="col-12 col-md-6 my-5">
@@ -73,24 +73,6 @@
         // Read
         // Update
         // Dalete
-
-
-        // JSON.parse => "[{name: Pervin},]" let data = JSON.parse(localStorage.getItem(""))
-        // JSON.stringfy
-
-        // set edende  => JSON.stringfy(  )
-        // get edende  => JSON.parse(  )
-
-        // const student = {
-        //     name: "Rehman",
-        //     age: 25
-        // }
-
-        // localStorage.setItem("student", JSON.stringify([]))
-        // localStorage.get("student", student)
-
-
-
 
         // fetch (api)
         const course_list = [{
@@ -117,6 +99,19 @@
         const submit_btn = document.getElementById("submitBtn")
         const validation_alert = document.getElementById("validationMessage")
 
+        const updated_student = JSON.parse(localStorage.getItem("update_student"))
+
+        if (updated_student) {
+            submit_btn.innerText = "Yenilə"
+
+            name_input.value = updated_student.name
+            surname_input.value = updated_student.surname
+            email_input.value = updated_student.email
+            fin_input.value = updated_student.fin
+            phone_input.value = updated_student.phone
+            course_input.value = updated_student.course_id
+        }
+
         course_list.forEach(item => {
             course_input.innerHTML += `<option value="${item.id}">${item.name}</option>`
         })
@@ -127,6 +122,9 @@
 
         function validate() {
             const errors = []
+            const student_list = JSON.parse(localStorage.getItem("student_list"))
+
+            const existStudent = student_list.find(student => student.fin.toLowerCase() == fin_input.value.trim().toLowerCase())
 
             // console.log(name_input.value)
             // console.log(name_input.value.trim())
@@ -135,7 +133,12 @@
 
             if (!name_input.value.trim()) errors.push("Ad daxil etməmisiniz")
             if (!surname_input.value.trim()) errors.push("Surname daxil etməmisiniz")
-            if (!fin_input.value.trim()) errors.push("FIN daxil etməmisiniz")
+            if (!fin_input.value.trim()) {
+                errors.push("FIN daxil etməmisiniz")
+            }
+            else if (existStudent) {
+                errors.push("FİN sistemdə mövcuddur")
+            }
             if (!email_input.value.trim()) errors.push("Email daxil etməmisiniz")
             if (!phone_input.value.trim()) errors.push("Telefon daxil etməmisiniz")
             !course_input.value && errors.push("Kurs seçilməyib")
@@ -169,8 +172,6 @@
         }
 
         submit_btn.addEventListener("click", function () {
-
-            // console.log(localStorage.getItem("name"));
 
             const errorMessages = validate()
 

@@ -13,7 +13,8 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-9">
+            <div class="col-md-12">
+                <a href="create.html" class="btn btn-primary mb-y">Yeni tələbə qeydiyyatı</a>
                 <table class="table">
                     <thead>
                         <tr>
@@ -25,15 +26,10 @@
                             <th>Telefon</th>
                             <th>Kurs</th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -42,27 +38,28 @@
 
     <script>
         const table_body = document.querySelector("tbody")
-
         const str = localStorage.getItem("student_list")
 
         const student_list = JSON.parse(str)
         const course_list = JSON.parse(localStorage.getItem("course_list"))
 
-        // console.log(student_list);
-        // console.log(course_list);
+        function removeItem(fin_param, delete_btn) {
+            delete_btn.parentElement.parentElement.remove()
+            const filtred_array = student_list.filter(student => student.fin != fin_param)
+            localStorage.setItem("student_list", JSON.stringify(filtred_array))
+        }
 
-        function removeItem(fin_param, btn_elem) {
-            // console.log("fin_param", fin_param);
-            // console.log("student_list", student_list);
-            // console.log("filter result =>   ", student_list.filter(student => student.fin != fin_param));
-
-            console.log("btn_elem", btn_elem);
-
-            // const filtred_array = student_list.filter(student => student.fin != fin_param)
-            // localStorage.setItem("student_list", JSON.stringify(filtred_array))
+        function updateItem(student) {
+            console.log("student", student);
+            localStorage.setItem("update_student", JSON.stringify(student))
+            window.location = "/create.html"
+            // window.open("/create.html")
         }
 
         student_list.forEach((student, index) => {
+
+            console.log(`student loop ${index} =>`, student);
+
             const tr = document.createElement("tr")
             const selected_course = course_list.find(course => course.id == student.course_id)
 
@@ -70,10 +67,15 @@
             delete_btn.innerText = "Sil"
             delete_btn.classList.add("btn", "btn-danger", "btn-sm")
             delete_btn.addEventListener("click", function () {
-
                 removeItem(student.fin, this)
             })
-            // delete_btn.addEventListener("click", () => removeItem(student.fin))
+
+            const update_btn = document.createElement("button")
+            update_btn.innerText = "Düzəlt"
+            update_btn.classList.add("btn", "btn-warning", "btn-sm")
+            update_btn.addEventListener("click", function () {
+                updateItem(student)
+            })
 
             tr.innerHTML += `
                 <td>${index + 1}</td>
@@ -83,16 +85,19 @@
                 <td>${student.email}</td>
                 <td>${student.phone}</td>
                 <td>${selected_course ? selected_course.name : "təyin edilməyib"}</td>
+                <td class="update_item"></td>
                 <td class="delete_item"></td>
             `;
 
             tr.querySelector(".delete_item").append(delete_btn)
+            tr.querySelector(".update_item").append(update_btn)
 
             table_body.append(tr)
         });
+
     </script>
 
-    <script>
+    <!-- <script>
 
 
         // let name = res.data.data.username
@@ -178,7 +183,7 @@
 
 
 
-    </script>
+    </script> -->
 </body>
 
 </html>
