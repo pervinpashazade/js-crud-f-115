@@ -55,6 +55,7 @@
                     </select>
                 </div>
                 <button type="submit" id="submitBtn" class="btn btn-primary">Əlavə et</button>
+                <button type="button" id="resetBtn" class="btn btn-secondary">Sıfırla</button>
                 <a href="list.html" class="btn btn-secondary">Listə bax</a>
             </div>
             <div class="col-12 col-md-6 my-5">
@@ -97,9 +98,22 @@
         const phone_input = document.getElementById("phone")
         const course_input = document.getElementById("course")
         const submit_btn = document.getElementById("submitBtn")
+        const reset_btn = document.getElementById("resetBtn")
         const validation_alert = document.getElementById("validationMessage")
 
-        const updated_student = JSON.parse(localStorage.getItem("update_student"))
+        reset_btn.addEventListener("click", function () {
+            name_input.value = ""
+            surname_input.value = ""
+            email_input.value = ""
+            fin_input.value = ""
+            phone_input.value = ""
+            course_input.value = "0"
+
+            localStorage.removeItem("update_student")
+            submit_btn.innerText = "Əlavə et"
+        })
+
+        let updated_student = JSON.parse(localStorage.getItem("update_student"))
 
         if (updated_student) {
             submit_btn.innerText = "Yenilə"
@@ -110,6 +124,8 @@
             fin_input.value = updated_student.fin
             phone_input.value = updated_student.phone
             course_input.value = updated_student.course_id
+
+            fin_input.setAttribute("disabled", "")
         }
 
         course_list.forEach(item => {
@@ -136,7 +152,7 @@
             if (!fin_input.value.trim()) {
                 errors.push("FIN daxil etməmisiniz")
             }
-            else if (existStudent) {
+            else if (!updated_student && existStudent) {
                 errors.push("FİN sistemdə mövcuddur")
             }
             if (!email_input.value.trim()) errors.push("Email daxil etməmisiniz")
@@ -172,7 +188,49 @@
         }
 
         submit_btn.addEventListener("click", function () {
+            debugger
+            // // update exist student
+            if (updated_student) {
 
+                // // don't update student's fin
+                // // updated_student.fin = fin_input.value;
+
+                updated_student.name = name_input.value;
+                updated_student.surname = surname_input.value;
+                updated_student.email = email_input.value;
+                updated_student.phone = phone_input.value;
+                updated_student.course_id = course_input.value;
+
+                const errorMessages = validate()
+                writeErrorMessage(errorMessages)
+
+                if (!errorMessages.length) {
+
+                    console.log("updated_student", updated_student);
+
+                    let currentList = JSON.parse(localStorage.getItem("student_list"))
+
+                    currentList = currentList.filter(student => student.fin !== updated_student.fin)
+
+                    currentList.push(updated_student)
+
+                    localStorage.setItem("student_list", JSON.stringify(currentList))
+
+                    localStorage.removeItem("update_student")
+
+                    clearForm()
+
+                    submit_btn.innerText = "Əlavə et"
+
+                    fin_input.removeAttribute("disabled")
+
+                    updated_student = null
+                }
+
+                return
+            }
+
+            // // create new student
             const errorMessages = validate()
 
             writeErrorMessage(errorMessages)
@@ -198,7 +256,6 @@
 
             }
 
-            // console.log(student_list);
         })
     </script>
 </body>
